@@ -25,7 +25,7 @@ module.exports = (app) => {
   function saveTunnelsToFile() {
     const tunnelArray = Object.values(tunnels);
     const data = JSON.stringify({ tunnels: tunnelArray }, null, 2);
-    fs.writeFile("./tunnels.json", data, (err) => {
+    fs.writeFile(process.env.DATA_PATH || "", "./tunnels.json", data, (err) => {
       if (err) {
         console.error("Error writing to tunnels.json:", err);
       }

@@ -10,9 +10,10 @@
       "name": "Launch Program",
       "skipFiles": ["<node_internals>/**"],
       "program": "${workspaceFolder}/src/index.js",
-      "args": ["cluster"],
+      "args": ["agent"],
       "env": {
-        "ENV_FILE": ".env"
+        "ENV_FILE": ".env",
+        "DATA_PATH": "secrets"
       }
     }
   ]
