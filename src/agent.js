@@ -13,8 +13,12 @@ const app = express();
 app.use(express.json());
 app.use(express.static("./src/public"));
 app.use(express.urlencoded({ extended: true }));
-const { getTunnelBySubdomain, getTunnelSubdomains, registerTunnelChange } =
-  apis(app);
+const {
+  getTunnelBySubdomain,
+  getTunnelSubdomains,
+  registerTunnelChange,
+  addBandwidth,
+} = apis(app);
 
 const connect = () => {
   const ws = new WebSocket(
@@ -36,6 +40,7 @@ const connect = () => {
       console.log(`🔄 Received ${method} request: ${url}`);
 
       const subdomain = headers.host.split(".")[0];
+      addBandwidth(subdomain, compressedMessage);
       const targetServer =
         (() => {
           const config = getTunnelBySubdomain(subdomain);

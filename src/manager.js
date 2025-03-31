@@ -195,6 +195,12 @@ module.exports = (app) => {
       res.status(404).json({ message: "Tunnel not found" });
     }
   });
+
+  function addWithSuffix(a, b) {
+    const numA = parseInt(a);
+    const numB = parseInt(b);
+    return numA + numB + "B";
+  }
   return {
     getTunnelSubdomains: () => {
       return Object.values(tunnels)
@@ -207,6 +213,14 @@ module.exports = (app) => {
     },
     registerTunnelChange: (cb) => {
       subdomainCb = cb;
+    },
+    addBandwidth: (subdomain, data) => {
+      let size = Buffer.byteLength(data, "utf8");
+      let tunnel = Object.values(tunnels).find(
+        (t) => t.subdomain === subdomain
+      );
+      tunnel.bandwith = addWithSuffix(tunnel.bandwith || "0B", `${size}B`);
+      saveTunnelsToFile();
     },
   };
 };

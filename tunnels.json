@@ -7,13 +7,13 @@
       "subdomain": "sanjairocky",
       "host": "192.168.0.9",
       "port": "8080",
-      "bandwith": "100GB",
+      "bandwith": "1153B",
       "status": "inactive",
       "description": "Main web server tunnel 1",
       "authtype": "password",
-      "lastUpdated": "2025-03-31T14:27:27.952Z",
+      "lastUpdated": "2025-03-31T15:11:33.138Z",
       "authType": "password",
-      "publicUrl": "http://sanjairocky.t.sanjairocky.in:8080"
+      "publicUrl": "http://sanjairocky.localhost:8080"
     },
     {
       "id": 2,
@@ -24,9 +24,10 @@
       "port": "3000",
       "authType": "password",
       "description": "",
-      "status": "inactive",
-      "lastUpdated": "2025-03-31T14:27:21.362Z",
-      "bandwith": "0B"
+      "status": "active",
+      "lastUpdated": "2025-03-31T15:08:49.069Z",
+      "bandwith": "56242B",
+      "publicUrl": "http://ingress.localhost:8080"
     }
   ]
 }
