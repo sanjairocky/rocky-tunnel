@@ -11,8 +11,9 @@
       "status": "inactive",
       "description": "Main web server tunnel 1",
       "authtype": "password",
-      "lastUpdated": "2025-03-31T05:35:20.877Z",
-      "authType": "password"
+      "lastUpdated": "2025-03-31T12:18:44.083Z",
+      "authType": "password",
+      "publicUrl": "http://sanjairocky.localhost:8080"
     },
     {
       "id": 2,
@@ -24,8 +25,9 @@
       "authType": "password",
       "description": "",
       "status": "inactive",
-      "lastUpdated": "2025-03-30T22:59:34.672Z",
-      "bandith": "0B"
+      "lastUpdated": "2025-03-31T12:13:52.330Z",
+      "bandith": "0B",
+      "publicUrl": "http://ingress.localhost:8080"
     }
   ]
 }

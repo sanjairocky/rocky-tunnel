@@ -12,4 +12,4 @@ RUN npm i
 EXPOSE 8080
 
 # Command to run the executable
-ENTRYPOINT ["node","server.js"]
+ENTRYPOINT ["node","src/index.js"]
