@@ -13,12 +13,8 @@ const app = express();
 app.use(express.json());
 app.use(express.static("./src/public"));
 app.use(express.urlencoded({ extended: true }));
-const {
-  getTunnelBySubdomain,
-  getTunnelSubdomains,
-  registerTunnelChange,
-  addPublicUrl,
-} = apis(app);
+const { getTunnelBySubdomain, getTunnelSubdomains, registerTunnelChange } =
+  apis(app);
 
 const connect = () => {
   const ws = new WebSocket(
@@ -36,22 +32,7 @@ const connect = () => {
 
   ws.on("message", (compressedMessage) => {
     receiveCompressed(compressedMessage, (request) => {
-      const {
-        transactionId,
-        method,
-        url,
-        headers,
-        body,
-        type,
-        publicUrl,
-        subdomains,
-      } = request;
-      if (type === "url") {
-        subdomains.forEach(({ subdomain, publicUrl }) =>
-          addPublicUrl(subdomain, publicUrl)
-        );
-        return;
-      }
+      const { transactionId, method, url, headers, body } = request;
       console.log(`🔄 Received ${method} request: ${url}`);
 
       const subdomain = headers.host.split(".")[0];

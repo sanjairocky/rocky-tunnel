@@ -20,13 +20,6 @@ wss.on("connection", (ws) => {
       if (data.type === "register") {
         data.subdomains.forEach((sub) => (agents[sub] = ws));
         console.log(`✅ Registered subdomains: ${data.subdomains.join(", ")}`);
-        sendCompressed(ws, {
-          type: "url",
-          subdomains: data.subdomains?.map((sd) => ({
-            subdomain: sd,
-            publicUrl: `http://${sd}.${process.env.MASTER_HOST}:${process.env.MASTER_PORT}`,
-          })),
-        });
       } else if (data.type === "unregister") {
         data.subdomains.forEach((sub) => delete agents[sub]);
         console.log(

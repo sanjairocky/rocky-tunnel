@@ -13,7 +13,7 @@ module.exports = (app) => {
     const tunnelData = JSON.parse(data);
     tunnels = tunnelData.tunnels.reduce((acc, tunnel) => {
       // tunnel.status = "inactive";
-      // delete tunnel.publicUrl;
+      tunnel.publicUrl = `http://${tunnel.subdomain}.${process.env.MASTER_HOST}:${process.env.MASTER_PORT}`;
       acc[tunnel.id] = tunnel;
       return acc;
     }, {});
@@ -25,11 +25,16 @@ module.exports = (app) => {
   function saveTunnelsToFile() {
     const tunnelArray = Object.values(tunnels);
     const data = JSON.stringify({ tunnels: tunnelArray }, null, 2);
-    fs.writeFile(process.env.DATA_PATH || "", "./tunnels.json", data, (err) => {
-      if (err) {
-        console.error("Error writing to tunnels.json:", err);
+    fs.writeFile(
+      require("path").join(process.env.DATA_PATH || "", "./tunnels.json"),
+      data,
+      { encoding: "utf8" },
+      (err) => {
+        if (err) {
+          console.error("Error writing to tunnels.json:", err);
+        }
       }
-    });
+    );
   }
 
   function parseSize(input) {
@@ -75,40 +80,6 @@ module.exports = (app) => {
       bytes: totalBytes,
       formatted: formatBytes(totalBytes),
     };
-  }
-
-  async function toogleTunnel(tunnel) {
-    try {
-      if (tunnel.status === "active") {
-        const lt = await localtunnel({
-          port: parseInt(tunnel.port),
-          local_host: tunnel.host,
-          subdomain: tunnel.subdomain,
-        });
-
-        tunnel.publicUrl = lt.url;
-        lt.on("url", (url) => {
-          // tunnels are opened
-          console.log(tunnel.id, url, "open");
-        });
-        lt.on("close", () => {
-          // tunnels are closed
-          console.log(tunnel.id, lt.url, "closed");
-          tunnel.status = "inactive";
-          delete tunnel.publicUrl;
-          delete tunnelsIngresses[tunnel.id];
-        });
-        tunnelsIngresses[tunnel.id] = lt;
-      } else {
-        delete tunnel.publicUrl;
-        if (tunnelsIngresses[tunnel.id]) {
-          tunnelsIngresses[tunnel.id]?.close?.();
-          delete tunnelsIngresses[tunnel.id];
-        }
-      }
-    } catch (e) {
-      console.error(`Error starting tunnel '${tunnel.name}':`, err);
-    }
   }
 
   // GET /api/tunnels/metrics
@@ -171,7 +142,8 @@ module.exports = (app) => {
       description,
       status,
       lastUpdated,
-      bandith: "0B",
+      bandwith: "0B",
+      publicUrl: `http://${subdomain}.${process.env.MASTER_HOST}:${process.env.MASTER_PORT}`,
     };
     tunnels[id] = newTunnel;
 
@@ -216,9 +188,6 @@ module.exports = (app) => {
             type: tunnels[id].status === "active" ? "register" : "unregister",
             subdomain: tunnels[id].subdomain,
           });
-          if (tunnels[id].status === "inactive") {
-            delete tunnels[id].publicUrl;
-          }
         }
       } catch (e) {}
       res.json(tunnels[id]);
@@ -238,14 +207,6 @@ module.exports = (app) => {
     },
     registerTunnelChange: (cb) => {
       subdomainCb = cb;
-    },
-    addPublicUrl: (subdomain, publicUrl) => {
-      if (!subdomain) return;
-      Object.values(tunnels).forEach((t) => {
-        if (t.subdomain === subdomain) {
-          t.publicUrl = publicUrl;
-        }
-      });
     },
   };
 };

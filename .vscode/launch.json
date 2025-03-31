@@ -10,10 +10,13 @@
       "name": "Launch Program",
       "skipFiles": ["<node_internals>/**"],
       "program": "${workspaceFolder}/src/index.js",
-      "args": ["agent"],
+      "args": ["cluster"],
       "env": {
         "ENV_FILE": ".env",
-        "DATA_PATH": "secrets"
+        "DATA_PATH": ".",
+        "MASTER_PORT": "8080",
+        "AGENT_PORT": "3000",
+        "MASTER_HOST": "localhost"
       }
     }
   ]

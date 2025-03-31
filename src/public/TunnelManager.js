@@ -93,6 +93,7 @@ function TunnelManager() {
     e.preventDefault();
     const formData = new FormData(e.target);
     const tunnelData = Object.fromEntries(formData.entries());
+    tunnelData.status = tunnelData.status === "on" ? "active" : "inactive";
 
     setLoading(true);
 
