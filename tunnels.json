@@ -1,0 +1,31 @@
+{
+  "tunnels": [
+    {
+      "id": 1,
+      "name": "Web Server",
+      "type": "http",
+      "subdomain": "sanjairocky",
+      "host": "192.168.0.9",
+      "port": "8080",
+      "bandwith": "100GB",
+      "status": "inactive",
+      "description": "Main web server tunnel 1",
+      "authtype": "password",
+      "lastUpdated": "2025-03-31T05:35:20.877Z",
+      "authType": "password"
+    },
+    {
+      "id": 2,
+      "name": "tedst",
+      "type": "http",
+      "subdomain": "ingress",
+      "host": "localhost",
+      "port": "3000",
+      "authType": "password",
+      "description": "",
+      "status": "inactive",
+      "lastUpdated": "2025-03-30T22:59:34.672Z",
+      "bandith": "0B"
+    }
+  ]
+}
