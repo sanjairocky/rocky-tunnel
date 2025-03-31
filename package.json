@@ -1,5 +1,5 @@
 {
-  "name": "lt-ingress",
+  "name": "rocky-tunnel",
   "main": "src/index.js",
   "dependencies": {
     "body-parser": "^2.2.0",
