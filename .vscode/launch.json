@@ -16,7 +16,11 @@
         "DATA_PATH": ".",
         "MASTER_PORT": "8080",
         "AGENT_PORT": "3000",
-        "MASTER_HOST": "localhost"
+        "MASTER_HOST": "localhost",
+        "MQTT_USERNAME": "sanjai",
+        "MQTT_PASSWORD": "rocky",
+        "MQTT_BROKER_URL": "mqtt://192.168.0.9:1883",
+        "AGENT_TRANSPORT": "mqtt"
       }
     }
   ]
