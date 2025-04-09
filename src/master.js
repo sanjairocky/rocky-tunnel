@@ -2,6 +2,8 @@ const express = require("express");
 const WebSocket = require("ws");
 const mqtt = require("mqtt"); // Added MQTT
 const http = require("http");
+const https = require("https");
+const fs = require("fs");
 const { v4: uuidv4 } = require("uuid");
 const compression = require("compression");
 const { sendCompressed, receiveCompressed } = require("./utils");
@@ -20,7 +22,31 @@ if (process.env.MQTT_PASSWORD)
   MQTT_OPTIONS.password = process.env.MQTT_PASSWORD;
 
 const app = express();
-const server = http.createServer(app);
+
+const server = (() => {
+  const certPath =
+    process.env.CERT_PATH || "/etc/letsencrypt/live/t.sanjairocky.in/";
+  const keyPath = certPath + "privkey.pem";
+  const certFile = certPath + "fullchain.pem";
+
+  console.log(keyPath, certFile);
+  // Check if the certificate files exist
+  // If they do, create an HTTPS server; otherwise, create an HTTP server
+  // Note: You might want to handle this more gracefully in production
+  // (e.g., using a reverse proxy like Nginx)
+  // For now, we assume the files are present if the path is set
+  // and the server is running in a secure context
+  // (e.g., behind a reverse proxy)
+  if (fs.existsSync(keyPath) && fs.existsSync(certFile)) {
+    const options = {
+      key: fs.readFileSync(keyPath),
+      cert: fs.readFileSync(certFile),
+    };
+    return https.createServer(options, app);
+  } else {
+    return http.createServer(app);
+  }
+})();
 
 // --- Agent Registry ---
 // Stores agent info: agents[subdomain] = { transport: 'ws'|'mqtt', client: ws | null }
@@ -329,7 +355,9 @@ app.get("/", (_, res) => {
 server.listen(MASTER_PORT, () =>
   console.log(
     `\n--- lt-ingress Master ---
-🌐 HTTP Server listening on port ${MASTER_PORT}
+🌐 HTTP${
+      process.env.CERT_PATH ? "S" : ""
+    } Server listening on port ${MASTER_PORT}
 🔌 WebSocket Server enabled
  M MQTT Client connecting to ${MQTT_BROKER_URL}
 -------------------------\n`

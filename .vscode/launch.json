@@ -10,7 +10,7 @@
       "name": "Launch Program",
       "skipFiles": ["<node_internals>/**"],
       "program": "${workspaceFolder}/src/index.js",
-      "args": ["cluster"],
+      "args": ["master"],
       "env": {
         "ENV_FILE": ".env",
         "DATA_PATH": ".",
@@ -20,7 +20,8 @@
         "MQTT_USERNAME": "sanjai",
         "MQTT_PASSWORD": "rocky",
         "MQTT_BROKER_URL": "mqtt://192.168.0.9:1883",
-        "AGENT_TRANSPORT": "mqtt"
+        "AGENT_TRANSPORT": "mqtt",
+        "CERT_PATH": "./cert/"
       }
     }
   ]
